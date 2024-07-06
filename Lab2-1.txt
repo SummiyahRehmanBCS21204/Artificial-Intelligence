@@ -1,0 +1,105 @@
+#lab2
+#While Loop
+count = 0
+while (count<3):
+    count=count+1
+    print("hello geeks"); print(count)
+#count=0
+#while(count==0);print("Hello geeks")
+#For Loop
+name="Calrk"
+for i in name:
+    print(i)
+list=("Red","Green","Yellow","Blue")
+for i in list:
+    print(i)
+    for x in i: #nested for loop
+        print(x)
+#range
+for i in range(5):
+    print(i)
+for i in range(5):
+    print(i+1)
+for i in range(1,5):
+    print(i)
+for i in range(0,12,3):#step
+    print(i)
+for i in range(len(list)):
+    print(i)
+for i in range(len(list)):
+    print(i)
+#Control Statements
+for letter in 'geeksforgreek':
+    if letter=='e' or letter =='s':
+         break
+         print('Current Letter:',letter)
+  
+#Functions
+def myname():
+    print("My name is Summiyah Rehman")
+myname()
+for i in range(len(list)):
+    print(i)
+    myname()
+#Parametric Functions
+def myfunct(fname):
+    print(fname+"Refsnses")
+myfunct("Emil")
+myfunct("Tobias")
+myfunct("Linus")
+#Default Parametric Functions
+def mycount(country="Norway"):print("I love "+country)
+mycount("Norway")
+mycount("Australia")
+mycount("Pakistan")
+#Return Values
+def count(x):
+    return 5*x
+print(count(3))
+print(count(2))
+#Passing list in a function
+def mylist(colors):
+    for i in list:
+        print(i)
+mylist(list)
+#Control Statements
+for letter in 'geeksforgreek':
+    if letter=='e' or letter =='s':
+        break
+    print('Current Letter:',letter)   
+for letter in 'geeksforgreek':
+    if letter=='e' or letter =='s':
+        continue
+    print('Current Letter:',letter)   
+#Classes and objects
+class myclass:
+    x=5
+p1=myclass()
+print(p1.x)
+class person:
+    def __init__(self,name,age):
+        self.name=name
+        self.age=age
+p2=person("Alia", 22)
+print(p2.name)
+print(p2.age)
+class person2:
+    def __init__(self,name,age):
+        self.name=name
+        self.age=age
+    def myfunc1(self):
+       print("My name is "+self.name)
+p2=person2("John",22,)  
+print(p2.name)
+print(p2.age)
+
+
+     
+    
+    
+
+
+
+
+         
+         
