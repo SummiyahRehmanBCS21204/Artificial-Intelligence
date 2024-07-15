@@ -1,0 +1,151 @@
+#Lab3
+#Question 1 
+for x in range(1500, 2701):
+    x=int(input("Enter any number"))
+    if (x %7==0 and x%5==0):
+        print("True")
+    else:
+        print("False")
+#Question 2
+def celsius_to_fahrenheit(celsius):
+    return (celsius * 9/5) + 32
+
+def fahrenheit_to_celsius(fahrenheit):
+    return (fahrenheit - 32) * 5/9
+
+print(f"60°C is {celsius_to_fahrenheit(60)} in Fahrenheit")
+print(f"45°F is {fahrenheit_to_celsius(45)} in Celsius")
+#Question 3
+while True:
+    x=int(input("Enter any number"))   
+    if (x>1 and x<10):
+        print("Well Guessed") 
+        break
+#Question 3
+while True:
+    x=int(input("Enter any number"))   
+    if (x>1 and x<10):
+        print("Well Guessed") 
+        break
+#Question 4
+def print_pattern():
+    for i in range(1, 6):
+        print('*' * i)
+    for i in range(4, 0, -1):
+        print('*' * i)
+print_pattern()
+#Question 5
+def reverse_word():
+    word = input("Enter a word: ")
+    reversed_word = word[::-1]
+    print(f"Reversed word: {reversed_word}")
+
+reverse_word()
+#Question 6
+def count_even_odd(numbers):
+    even_count = 0
+    odd_count = 0
+    for num in numbers:
+        if num % 2 == 0:
+            even_count += 1
+        else:
+            odd_count += 1
+    return even_count, odd_count
+
+numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+even_count, odd_count = count_even_odd(numbers)
+print(f"Number of even numbers: {even_count} Number of odd numbers: {odd_count}")
+#Question 7
+def print_list_items(data_list):
+    for item in data_list:
+        print(f"{item} : {type(item)}")
+
+datalist = [1452, 11.23, 1+2j, True, 'w3resource', (0, -1), [5, 12], {"class":'V', "section":'A'}]
+print_list_items(datalist)
+#Question 8
+def print_numbers():
+    for num in range(7):
+        if num == 3 or num == 6:
+            continue
+        print(num)
+
+print_numbers()
+#Question 9
+def fibonacci_series(n):
+    fib_series = [0, 1]
+    while True:
+        next_fib = fib_series[-1] + fib_series[-2]
+        if next_fib > n:
+            break
+        fib_series.append(next_fib)
+    return fib_series
+print(fibonacci_series(50))
+#fizzbuzzz
+def fizz_buzz():
+    for i in range(1, 51):
+        if i % 3 == 0 and i % 5 == 0:
+            print(i,"FizzBuzz")
+        elif i % 3 == 0:
+            print(i,"Fizz")
+        elif i % 5 == 0:
+            print(i,"Buzz")
+        else:
+            print(i)
+fizz_buzz()
+#Question 10
+# Two-dimensional array generation
+def generate_2d_array(m, n):
+    array = [[i * j for j in range(n)] for i in range(m)]
+    return array
+m = 3
+n = 4
+array = generate_2d_array(m, n)
+print(array)
+#Question 11
+# Accepts a sequence of lines and prints in lowercase
+def lines_to_lowercase():
+    lines = []
+    while True:
+        line = input()
+        if line:
+            lines.append(line.lower())
+        else:
+            break
+    for line in lines:
+        print(line)
+lines_to_lowercase()
+#Question 12
+# Binary numbers divisible by 5
+def binary_divisible_by_5(binary_numbers):
+    divisible_by_5 = [num for num in binary_numbers if int(num, 2) % 5 == 0]
+    return ','.join(divisible_by_5)
+binary_numbers = ['0100', '0011', '1010', '1001', '1100', '1001']
+result = binary_divisible_by_5(binary_numbers)
+print(result)
+#Question 13
+# Calculate the number of digits and letters
+def count_letters_digits(string):
+    letters = sum(c.isalpha() for c in string)
+    digits = sum(c.isdigit() for c in string)
+    return letters, digits
+string = "Python 3.2"
+letters, digits = count_letters_digits(string)
+print("Letters", letters)
+print("Digits", digits)
+#Question 14
+def validate_password(password):
+    if (6 <= len(password) <= 16 and
+            re.search(r'[a-z]', password) and
+            re.search(r'[A-Z]', password) and
+            re.search(r'[0-9]', password) and
+            re.search(r'[\$#@]', password)):
+        return True
+    return False
+password = "Test@123"
+print("Password is valid" if validate_password(password) else "Password is invalid")
+
+
+
+
+    
+    
