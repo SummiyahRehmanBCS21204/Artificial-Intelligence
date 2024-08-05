@@ -1,0 +1,80 @@
+Task1:
+# Graph represented as an adjacency list
+graph = {
+    'A': ['B', 'F', 'D', 'E'],
+    'B': ['K', 'J'],
+    'F': [],
+    'D': ['G', 'C'],
+    'E': ['H', 'I'],
+    'K': ['N', 'M'],
+    'J': [],
+    'G': [],
+    'C': [],
+    'H': [],
+    'I': ['L'],
+    'N': [],
+    'M': [],
+    'L': []
+}
+
+# DFS implementation using a stack
+def dfs(graph, start):
+    visited = set()  # To keep track of visited nodes
+    stack = [start]  # Initialize stack with the start node
+
+    while stack:
+        node = stack.pop()  # Pop the top element from the stack
+        if node not in visited:
+            print(node, end=" ")  # Process the node (here, we just print it)
+            visited.add(node)  # Mark the node as visited
+            stack.extend(reversed(graph[node]))  # Push all neighbors to the stack
+
+# Starting DFS traversal from node 'A'
+dfs(graph, 'A')
+Task2:
+from collections import defaultdict
+
+class Graph:
+    def _init_(self, vertices):
+        self.V = vertices  # Number of vertices
+        self.graph = defaultdict(list)  # Default dictionary to store the graph
+
+    # Function to add an edge to the graph
+    def add_edge(self, v, w):
+        self.graph[v].append(w)
+
+    # A function used by DFS to recursively visit nodes
+    def dfs_util(self, v, visited):
+        # Mark the current node as visited
+        visited[v] = True
+        print(v, end=' ')  # Print the visited node
+
+        # Recur for all vertices adjacent to this vertex
+        for neighbor in self.graph[v]:
+            if not visited[neighbor]:
+                self.dfs_util(neighbor, visited)
+
+    # DFS traversal starting from a given vertex v
+    def dfs(self, v):
+        # Mark all the vertices as not visited
+        visited = [False] * (self.V)
+        
+        # Call the recursive helper function to start DFS traversal
+        self.dfs_util(v, visited)
+# Example usage:
+g = Graph(13)  # Assuming a graph with 13 vertices
+
+g.add_edge(1, 2)
+g.add_edge(1, 7)
+g.add_edge(2, 3)
+g.add_edge(2, 6)
+g.add_edge(3, 4)
+g.add_edge(3, 5)
+g.add_edge(7, 8)
+g.add_edge(8, 9)
+g.add_edge(8, 12)
+g.add_edge(9, 10)
+g.add_edge(9, 11)
+
+print("Depth First Traversal (starting from vertex 1):")
+g.dfs(1)
