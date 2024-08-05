@@ -1,0 +1,133 @@
+Task 1:
+import heapq
+
+class PriorityQueue:
+    def _init_(self):
+        self.heap = []
+
+    def push(self, item, priority):
+        # Invert priority to make heapq a max-heap
+        heapq.heappush(self.heap, (-priority, item))
+
+    def pop(self):
+# Return the item with the highest priority
+        return heapq.heappop(self.heap)[1]
+
+    def is_empty(self):
+        return len(self.heap) == 0
+
+    def peek(self):
+        # Return the item with the highest priority without popping it
+        return self.heap[0][1] if self.heap else None
+
+# Example usage:
+pq = PriorityQueue()
+pq.push("task1", priority=3)
+pq.push("task2", priority=1)
+pq.push("task3", priority=2)
+
+print(pq.pop())  # Output: task1
+print(pq.pop())  # Output: task3
+print(pq.pop())  # Output: task2
+print(pq.is_empty())  # Output: True
+Task2:
+from collections import deque
+
+class Graph:
+    def _init_(self):
+        self.graph = {}
+    
+    def addEdge(self, u, v):
+        if u not in self.graph:
+            self.graph[u] = []
+        self.graph[u].append(v)
+
+    def BFS(self, start, goal):
+        visited = set()
+        queue = deque([[start]])
+        
+        if start == goal:
+            return [start]
+        
+        while queue:
+            path = queue.popleft()
+            node = path[-1]
+            
+            if node not in visited:
+                neighbors = self.graph.get(node, [])
+                
+                for neighbor in neighbors:
+                    new_path = list(path)
+                    new_path.append(neighbor)
+                    queue.append(new_path)
+                    
+                    if neighbor == goal:
+                        return new_path
+                
+                visited.add(node)
+        
+        return None
+
+# Create the graph
+g = Graph()
+g.addEdge('A', 'B')
+g.addEdge('A', 'F')
+g.addEdge('A', 'D')
+g.addEdge('B', 'K')
+g.addEdge('B', 'J')
+g.addEdge('K', 'N')
+g.addEdge('K', 'M')
+g.addEdge('D', 'G')
+g.addEdge('D', 'C')
+g.addEdge('C', 'H')
+g.addEdge('C', 'I')
+g.addEdge('I', 'L')
+
+# Perform BFS
+start = 'A'
+goal = 'G'
+path = g.BFS(start, goal)
+
+if path:
+    print("Path from {} to {} is: {}".format(start, goal, " -> ".join(path)))
+else:
+    print("No path found from {} to {}".format(start, goal))
+Task 3:
+from collections import deque
+
+class Graph:
+    def _init_(self, vertices):
+        self.V = vertices
+        self.adj = [[] for _ in range(vertices)]
+    
+    def add_edge(self, v, w):
+        self.adj[v].append(w)
+        self.adj[w].append(v)  # Since the graph is undirected, add an edge from w to v as well
+    
+    def bfs(self, s):
+        visited = [False] * self.V
+        queue = deque([s])
+        visited[s] = True
+        
+        while queue:
+            s = queue.popleft()
+            print(s, end=' ')
+            
+            for i in self.adj[s]:
+                if not visited[i]:
+                    queue.append(i)
+                    visited[i] = True
+
+# Creating the graph as shown in the image
+g = Graph(5)
+g.add_edge(0, 1)
+g.add_edge(0, 4)
+g.add_edge(1, 2)
+g.add_edge(1, 3)
+g.add_edge(1, 4)
+g.add_edge(2, 3)
+g.add_edge(3, 4)
+
+# Perform BFS traversal starting from vertex 0
+g.bfs(0)
+
