@@ -1,0 +1,261 @@
+Lab 8
+Task 1:
+import heapq
+
+class Node:
+    def __init__(self, state, parent=None, cost=0, heuristic=0):
+        self.state = state
+        self.parent = parent
+        self.cost = cost  # This is typically ignored in GBFS
+        self.heuristic = heuristic
+
+    def __lt__(self, other):
+        return self.heuristic < other.heuristic
+
+def greedy_best_first_search(start, goal, h):
+    # Priority queue to hold nodes to explore
+    open_list = []
+    # Push the start node with its heuristic value
+    heapq.heappush(open_list, Node(start, heuristic=h[start]))
+    
+    # Set to keep track of visited nodes
+    visited = set()
+
+    while open_list:
+        current_node = heapq.heappop(open_list)
+        current_state = current_node.state
+
+        # If the goal is reached, reconstruct the path
+        if current_state == goal:
+            return reconstruct_path(current_node)
+
+        visited.add(current_state)
+
+        # Expand the neighbors
+        for neighbor, cost in get_neighbors(current_state):
+            if neighbor not in visited:
+                heapq.heappush(open_list, Node(neighbor, parent=current_node, heuristic=h[neighbor]))
+
+    return None  # If no path found
+
+def get_neighbors(state):
+    # Define this function based on your problem's state space.
+    # It should return a list of tuples (neighbor, cost).
+    # Example for a grid:
+    # return [(new_state_1, cost_1), (new_state_2, cost_2), ...]
+    pass
+
+def reconstruct_path(node):
+    path = []
+    while node:
+        path.append(node.state)
+        node = node.parent
+    return path[::-1]  # Return reversed path
+
+# Example usage:
+# Define the heuristic for each state (e.g., based on Manhattan distance for grid problems)
+heuristic = {
+    'A': 5,
+    'B': 3,
+    'C': 6,
+    'D': 2,
+    'E': 4,
+    'F': 0,  # Goal state
+}
+
+# Define the neighbors for each state (adjacency list)
+def get_neighbors(state):
+    neighbors = {
+        'A': [('B', 1), ('C', 3)],
+        'B': [('D', 2), ('E', 4)],
+        'C': [('F', 5)],
+        'D': [('F', 2)],
+        'E': [('F', 1)],
+        'F': [],
+    }
+    return neighbors.get(state, [])
+
+start_state = 'A'
+goal_state = 'F'
+path = greedy_best_first_search(start_state, goal_state, heuristic)
+print("Path:", path)
+Task 2:
+import heapq
+
+class Node:
+    def __init__(self, position, parent=None):
+        self.position = position
+        self.parent = parent
+        self.g = 0  # Cost from start to the current node
+        self.h = 0  # Heuristic cost estimate to reach goal
+        self.f = 0  # Total cost (g + h)
+
+    def __eq__(self, other):
+        return self.position == other.position
+
+    def __lt__(self, other):
+        return self.f < other.f
+
+def a_star_search(grid, start, end):
+    start_node = Node(start)
+    end_node = Node(end)
+
+    open_list = []
+    closed_list = []
+
+    heapq.heappush(open_list, start_node)
+
+    while open_list:
+        current_node = heapq.heappop(open_list)
+        closed_list.append(current_node)
+
+        # Check if we have reached the goal
+        if current_node == end_node:
+            path = []
+            while current_node:
+                path.append(current_node.position)
+                current_node = current_node.parent
+            return path[::-1]  # Return reversed path
+
+        # Generate neighbors
+        neighbors = []
+        for new_position in [(0, -1), (0, 1), (-1, 0), (1, 0), (-1, -1), (-1, 1), (1, -1), (1, 1)]:
+            node_position = (current_node.position[0] + new_position[0],
+                             current_node.position[1] + new_position[1])
+
+            # Ensure within grid boundaries
+            if (0 <= node_position[0] < len(grid) and
+                    0 <= node_position[1] < len(grid[0])):
+                if grid[node_position[0]][node_position[1]] == 0:  # Walkable cell
+                    new_node = Node(node_position, current_node)
+                    neighbors.append(new_node)
+
+        # Process neighbors
+        for neighbor in neighbors:
+            if neighbor in closed_list:
+                continue
+
+            # Calculate g, h, and f values
+            neighbor.g = current_node.g + 1
+            neighbor.h = ((neighbor.position[0] - end_node.position[0]) ** 2) + \
+                         ((neighbor.position[1] - end_node.position[1]) ** 2)
+            neighbor.f = neighbor.g + neighbor.h
+
+            # If neighbor is already in open_list and has a higher g score, skip it
+            if add_to_open(open_list, neighbor):
+                heapq.heappush(open_list, neighbor)
+
+    return None  # No path found
+
+def add_to_open(open_list, neighbor):
+    for node in open_list:
+        if neighbor == node and neighbor.g > node.g:
+            return False
+    return True
+
+# Example usage
+grid = [
+    [0, 1, 0, 0, 0],
+    [0, 1, 0, 1, 0],
+    [0, 0, 0, 1, 0],
+    [0, 1, 0, 1, 0],
+    [0, 0, 0, 0, 0]
+]
+
+start = (0, 0)
+end = (4, 4)
+
+path = a_star_search(grid, start, end)
+print("Path:", path)
+Task 3:
+import heapq
+
+class PuzzleNode:
+    def __init__(self, state, parent=None, move=0, depth=0):
+        self.state = state
+        self.parent = parent
+        self.move = move
+        self.depth = depth
+        self.cost = 0  # g(n) + h(n)
+
+    def __lt__(self, other):
+        return self.cost < other.cost
+
+    def __eq__(self, other):
+        return self.state == other.state
+
+def heuristic(state, goal):
+    # Manhattan distance heuristic
+    distance = 0
+    for i in range(1, 9):
+        xi, yi = divmod(state.index(i), 3)
+        xg, yg = divmod(goal.index(i), 3)
+        distance += abs(xi - xg) + abs(yi - yg)
+    return distance
+
+def get_neighbors(node):
+    neighbors = []
+    x, y = divmod(node.state.index(0), 3)
+    directions = [('up', -1, 0), ('down', 1, 0), ('left', 0, -1), ('right', 0, 1)]
+
+    for direction, dx, dy in directions:
+        nx, ny = x + dx, y + dy
+        if 0 <= nx < 3 and 0 <= ny < 3:
+            new_state = list(node.state)
+            new_state[x * 3 + y], new_state[nx * 3 + ny] = new_state[nx * 3 + ny], new_state[x * 3 + y]
+            neighbors.append(PuzzleNode(tuple(new_state), node, direction, node.depth + 1))
+
+    return neighbors
+
+def a_star(start, goal):
+    start_node = PuzzleNode(start)
+    goal_node = PuzzleNode(goal)
+    open_list = []
+    closed_list = set()
+
+    heapq.heappush(open_list, start_node)
+
+    while open_list:
+        current_node = heapq.heappop(open_list)
+        closed_list.add(current_node.state)
+
+        if current_node.state == goal_node.state:
+            path = []
+            moves = []
+            while current_node.parent:
+                path.append(current_node.state)
+                moves.append(current_node.move)
+                current_node = current_node.parent
+            path.append(start)
+            return path[::-1], moves[::-1]
+
+        for neighbor in get_neighbors(current_node):
+            if neighbor.state in closed_list:
+                continue
+
+            neighbor.cost = current_node.depth + heuristic(neighbor.state, goal_node.state)
+
+            if neighbor not in open_list:
+                heapq.heappush(open_list, neighbor)
+
+    return None, None
+
+def print_puzzle(state):
+    for i in range(0, 9, 3):
+        print(state[i:i+3])
+    print()
+
+# Example usage
+start_state = (1, 2, 3, 4, 0, 5, 6, 7, 8)
+goal_state = (1, 2, 3, 4, 5, 6, 7, 8, 0)
+
+path, moves = a_star(start_state, goal_state)
+
+if path:
+    print("Solution found!")
+    print("Moves:", moves)
+    print("\nPath:")
+    for state in path:
+        print_puzzle(state)
+else:
+    print("No solution found.")
